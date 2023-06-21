@@ -24,6 +24,16 @@ public class IndexController {
 	private UsuarioRepository usuarioRepository;
 	
 	//Serviço RESTFul
+		@GetMapping(value = "/{id}/codvenda/{venda}", produces = "application/json")
+		public ResponseEntity<Usuario> relatorio(@PathVariable (value = "id") Long id,
+				@PathVariable (value = "venda") Long venda) {
+			
+		Optional<Usuario> usuarios = usuarioRepository.findById(id);
+			
+		return new ResponseEntity("RELATORIO: PDF : " + usuarios + " COD " + venda, HttpStatus.OK);
+		}
+	
+	//Serviço RESTFul
 	@GetMapping(value = "/{id}", produces = "application/json")
 	public ResponseEntity<Usuario> init(@PathVariable (value = "id") Long id) {
 		
