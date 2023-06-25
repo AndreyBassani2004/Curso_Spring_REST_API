@@ -18,8 +18,8 @@ public class ServletInitializer extends SpringBootServletInitializer implements 
 	public void addCorsMappings(CorsRegistry registry) {
 		
 		registry.addMapping("/usuario/**")
-		.allowedMethods("*");
-		//.allowedOrigins("https//www.cliente40.com.br","https//www.cliente60.com.br");
+		.allowedMethods("*")
+		.allowedOrigins("localhost:5500");
 		//Liberando requisições para cliente 40
 		
 	}
