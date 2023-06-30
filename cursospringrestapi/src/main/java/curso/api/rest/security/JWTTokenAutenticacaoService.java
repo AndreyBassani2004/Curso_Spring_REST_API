@@ -1,12 +1,11 @@
 package curso.api.rest.security;
 
+import java.io.IOException;
 import java.util.Date;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -34,7 +33,7 @@ public class JWTTokenAutenticacaoService {
 	private static final String HEADER_STRING = "Authorization";
 	
 	/*Gerando token de autenticação e adicionar ao cabeçalho e resposta HTTP*/
-	public void addAuthentication(HttpServletResponse response, String username) throws Exception{
+	public void addAuthentication(HttpServletResponse response, String username) throws IOException{
 		
 	/*Montagem do TOKEN*/
 	String JWT = Jwts.builder()/*Chama o gerador de TOKEN*/
