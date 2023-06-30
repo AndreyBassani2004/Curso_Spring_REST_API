@@ -6,22 +6,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import org.hibernate.annotations.ForeignKey;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Telefone {
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	public Long id;
-	
-	public String numero;
-	
+	private Long id;
+
+	private String numero;
+
 	@JsonIgnore
-	@ForeignKey(name = "usuario_id")
+	@org.hibernate.annotations.ForeignKey(name = "usuario_id")
 	@ManyToOne(optional = false)
 	private Usuario usuario;
 
@@ -48,5 +45,5 @@ public class Telefone {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-		
+
 }

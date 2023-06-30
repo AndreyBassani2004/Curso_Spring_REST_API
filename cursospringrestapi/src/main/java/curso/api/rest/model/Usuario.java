@@ -1,11 +1,11 @@
 package curso.api.rest.model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,13 +14,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Usuario implements UserDetails {
@@ -31,22 +33,57 @@ public class Usuario implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	private String nome;
-	
+	@Column(unique = true)
 	private String login;
 
 	private String senha;
 	
-	@OneToMany(mappedBy = "usuario", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Telefone> telefones = new ArrayList<Telefone>();
+	private String nome;
+	
+	@CPF(message= "Cpf inálido")
+	private String cpf;
 
+	@OneToMany(mappedBy="usuario", orphanRemoval = true, cascade = CascadeType.ALL, fetch =FetchType.LAZY)
+	private List<Telefone> telefones = new ArrayList<Telefone>();
+	
+	
 	@OneToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "usuarios_role", uniqueConstraints = @UniqueConstraint(columnNames = {"usuario_id", "role_id"}, name = "unique_role_user"),
+	@JoinTable(name = "usuarios_role", uniqueConstraints = @UniqueConstraint (
+			         columnNames = {"usuario_id","role_id"}, name = "unique_role_user"), 
 	joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id", table = "usuario", unique = false,
-	foreignKey = @ForeignKey(name = "usuario_fk", value = ConstraintMode.CONSTRAINT)),
-	inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id", table = "role", unique = false, updatable = false,
-	foreignKey = @ForeignKey (name="role_fk", value = ConstraintMode.CONSTRAINT)))
-	private List<Role> roles; 
+	foreignKey = @ForeignKey(name = "usuario_fk", value = ConstraintMode.CONSTRAINT)), 
+	
+	inverseJoinColumns = @JoinColumn (name = "role_id", referencedColumnName = "id", table = "role", unique = false, updatable = false,
+	   foreignKey = @ForeignKey (name="role_fk", value = ConstraintMode.CONSTRAINT)))
+	private List<Role> roles; /*Os papeis ou acessos*/
+	
+	
+	private String token = "";
+	
+	public void setToken(String token) {
+		this.token = token;
+	}
+	
+	public String getToken() {
+		return token;
+	}
+	
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+	
+	public String getCpf() {
+		return cpf;
+	}
+	
+	public List<Telefone> getTelefones() {
+		return telefones;
+	}
+	
+	public void setTelefones(List<Telefone> telefones) {
+		this.telefones = telefones;
+	}
+	
 
 	public Long getId() {
 		return id;
@@ -80,14 +117,6 @@ public class Usuario implements UserDetails {
 		this.nome = nome;
 	}
 
-	public List<Telefone> getTelefones() {
-		return telefones;
-	}
-
-	public void setTelefones(List<Telefone> telefones) {
-		this.telefones = telefones;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -113,37 +142,44 @@ public class Usuario implements UserDetails {
 		return true;
 	}
 
-	/*São os acessos do usuario*/
+	/*São os acessos do usuário ROLE_ADMIN OU ROLE_VISITANTE*/
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
+
 		return roles;
 	}
 
+	@JsonIgnore
 	@Override
 	public String getPassword() {
 		return this.senha;
 	}
 
+	@JsonIgnore
 	@Override
 	public String getUsername() {
 		return this.login;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isAccountNonLocked() {
 		return true;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isEnabled() {
 		return true;
