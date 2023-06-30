@@ -41,7 +41,7 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter{
 		.and().addFilterBefore(new JWTLoginFilter("/login", authenticationManager()), UsernamePasswordAuthenticationFilter.class)
 		
 		/*Filtra demais requisiçoes para verificar a preseça do TOKEN JWT no HEADER HTTP*/
-		.addFilterBefore(new JwtApiAtenticacaoFilter(), UsernamePasswordAuthenticationFilter.class);
+		.addFilterBefore(new JwtApiAutenticacaoFilter(), UsernamePasswordAuthenticationFilter.class);
 		
 	}
 	
