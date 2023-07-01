@@ -39,6 +39,7 @@ public class IndexController {
 			
 		return new ResponseEntity(usuarios, HttpStatus.OK);
 		}
+		
 	
 	//Serviço RESTFul
 	@GetMapping(value = "/{id}", produces = "application/json")
@@ -48,6 +49,35 @@ public class IndexController {
 		
 		return new ResponseEntity(usuarios, HttpStatus.OK);
 	}
+	
+	//Serviço RESTFul header
+	@GetMapping(value = "/{id}", produces = "application/json",  headers = "X-API-Version=V3")
+	public ResponseEntity<Usuario> initheader(@PathVariable (value = "id") Long id) {
+			
+	Optional<Usuario> usuarios = usuarioRepository.findById(id);
+	System.out.println("V3 HEADER");
+			
+	return new ResponseEntity(usuarios, HttpStatus.OK);
+	}
+	
+	//Serviço RESTFul v1
+		@GetMapping(value = "v1/{id}", produces = "application/json")
+		public ResponseEntity<Usuario> init1(@PathVariable (value = "id") Long id) {
+			
+		Optional<Usuario> usuarios = usuarioRepository.findById(id);
+			System.out.println("V1");
+			return new ResponseEntity(usuarios, HttpStatus.OK);
+		}
+		
+		//Serviço RESTFul v2
+		@GetMapping(value = "v2/{id}", produces = "application/json")
+		public ResponseEntity<Usuario> init2(@PathVariable (value = "id") Long id) {
+					
+		Optional<Usuario> usuarios = usuarioRepository.findById(id);
+		System.out.println("V2");
+	
+		return new ResponseEntity(usuarios, HttpStatus.OK);
+		}
 	
 	
 	@DeleteMapping(value = "/{id}", produces = "application/text")
