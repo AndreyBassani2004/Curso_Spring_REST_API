@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import curso.api.rest.model.Usuario;
+import curso.api.rest.model.UsuarioDTO;
 import curso.api.rest.repositoy.UsuarioRepository;
 
 @CrossOrigin(origins = "*")
@@ -48,11 +49,11 @@ public class IndexController {
 	@GetMapping(value = "/{id}", produces = "application/json")
 	@CacheEvict(value="cacheUsuarios", allEntries = true)
 	@CachePut("cacheUsuarios")
-	public ResponseEntity<Usuario> init(@PathVariable (value = "id") Long id) {
+	public ResponseEntity<UsuarioDTO> init(@PathVariable (value = "id") Long id) {
 		
 	Optional<Usuario> usuarios = usuarioRepository.findById(id);
 		
-		return new ResponseEntity(usuarios, HttpStatus.OK);
+		return new ResponseEntity<UsuarioDTO>((new UsuarioDTO(usuarios.get())), HttpStatus.OK);
 	}
 	
 	//Serviço RESTFul header
